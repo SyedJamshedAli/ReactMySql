@@ -27,7 +27,8 @@ app.use(express.json())
 //app.use('/',express.static(path.join(__dirname,'/public')))
 
 //Routes
-app.use('/account',require('./api/account.js'));
+app.use('/register',require('./routes/register'));
+app.use('/account',require('./routes/api/account.js'));
 
 const db=createConnection({
     host:'localhost',

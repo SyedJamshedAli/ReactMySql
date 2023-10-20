@@ -6,7 +6,7 @@ const registerController=require('../controllers/employeesController')
 
 router.route('/')
 .post(
-   console.log('in register.js')
+    registerController.createNewUser
 )
 
 module.exports=router;

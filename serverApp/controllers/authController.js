@@ -37,7 +37,7 @@ if (match){
         {expiresIn: '1d'}        
     );
     const otherUsers=data.users.filter(u=>u.email!== userExist.email);
-    const currentUsers=    
+    //const currentUsers=    
     
     res.json({"message":`${email} is logged in `})
 }

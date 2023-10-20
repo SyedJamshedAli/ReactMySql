@@ -1,7 +1,1 @@
-[{
-    "id":1,
-    "name":"Jamshed",
-    "email":"jam@test.com",
-    "password":"123456"
-
-}]
+[{"id":1,"name":"Jamshed","email":"jam@test.com","password":"123456"},{"id":2,"name":"bbb","email":"bbb@test.com","password":"bbbbbb"},{"id":3,"name":"ccc","email":"ccc@test.com","password":"ccc"},{"id":4,"name":"ddd","email":"ddd@test.com","password":"$2b$10$rOhImddiFhL9p30oPihunOHmjQd8Tlr/kpFSCy1qiWpBEF6tWKSF2"},{"id":5,"name":"eee","email":"eee@test.com","password":"$2b$10$I8eUDnnJp.lsu.xwPYzGAOjwAcUCplJGauaQHJG1N65krReGUVC1."},{"id":6,"name":"fff","email":"fff@test.com","password":"$2b$10$rIJSg8S7QnUgeu6d7gaeiuAVp1BBUoQGgUjUI15bU6jEG7w.m0dA6"},{"id":7,"name":"ggg","email":"ggg@test.com","password":"$2b$10$8j2KY3ZaghRzz8GiWKlmWO.f88svlHJDNU6HM2TIkxuBzGFN2MGey"}]

@@ -16,7 +16,7 @@ const getAllusers = (req, res) => {
 //const registerNewUser
 
 const createNewUser = async (req, res) => {
-console.log(req.body);
+
     const newUser = {
     id: data.users[data.users.length - 1].id + 1 || 1,
     name: req.body.name,
@@ -36,11 +36,14 @@ console.log(req.body);
       .json({ message: "Name,email and password is required" });
 
   //check duplicate data
-  const duplicate = data.users.find((u) => u.email === email);
-  if (!duplicate) return res.sendStatus(409); //conflice
+   const duplicate = data.users.find(u => u.email === email);
+    if ((duplicate)) 
+  {return res.sendStatus(409); //conflice
+}
   try {
     //encrypt password
-    const hashedpwd = await bcrypt.hash(pwd, 10);
+    newUser.password = await bcrypt.hash(password, 10);
+    //newUser.password=hashedpwd
     //store new user
     data.setUsers([...data.users, newUser]);
 
@@ -49,7 +52,7 @@ console.log(req.body);
       JSON.stringify(data.users)
     );
     console.log(data.users);
-    return res.status(201).json({ success: `User created ${user} created` });
+    return res.status(201).json({ success: `User created ${newUser.name} created` });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

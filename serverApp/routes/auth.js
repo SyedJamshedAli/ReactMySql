@@ -1,15 +1,13 @@
 const express=require('express');
 const router=express.Router();
-const registerController=require('../controllers/employeesController')
+const handleLogin=require('../controllers/authController')
 
 //router.post('/',registerController.createNewUser);
 
 router.route('/')
-.get(
-    registerController.getAllusers 
-)
 .post(
-    registerController.createNewUser
+    handleLogin 
 )
+
 
 module.exports=router;

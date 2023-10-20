@@ -29,6 +29,7 @@ app.use(express.json())
 //Routes
 app.use('/register',require('./routes/register'));
 app.use('/account',require('./routes/api/account.js'));
+app.use('/auth',require("./routes/auth"))
 
 const db=createConnection({
     host:'localhost',

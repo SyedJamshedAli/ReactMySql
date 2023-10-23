@@ -4,25 +4,28 @@ const router=express.Router();
 const path=require('path');
 const data={};
 data.user=require('../../model/user.json');
-const employeeContoller=require('../../controllers/employeesController')
+const employeeController=require('../../controllers/employeesController')
+const rolesList=require('../../config/roles_list');
+const verifyRoles=require('../../middleware/verifyRoles');
 
 router.route('/')
 .get(
-employeeContoller.getAllusers    
+    employeeController.getAllusers    
 )
 .post(
-employeeContoller.createNewUser
+    verifyRoles(rolesList.Admin,rolesList.Editor),employeeController.createNewUser
 )
 .put(
-employeeContoller.updateUser
+    verifyRoles(rolesList.Admin,rolesList.Editor),employeeController.updateUser
 )
 .delete(
-employeeContoller.deleteUser
+    verifyRoles(rolesList.Admin),
+    employeeController.deleteUser
 )
 
 router.route('/:id')
 .get(
-    employeeContoller.getUser
+    employeeController.getUser
 )
 
 

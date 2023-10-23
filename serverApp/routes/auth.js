@@ -6,7 +6,7 @@ const handleLogin=require('../controllers/authController')
 
 router.route('/')
 .post(
-    handleLogin 
+        handleLogin 
 )
 
 

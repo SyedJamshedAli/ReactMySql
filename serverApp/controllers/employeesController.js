@@ -22,6 +22,7 @@ const createNewUser = async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
+    roles:{user:3}
   };
 
   const { name, email, password } = req.body;

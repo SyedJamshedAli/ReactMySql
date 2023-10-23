@@ -11,18 +11,14 @@ const createNewUser = async (req, res) => {
 
     
   const { name, email, password } = req.body;
-  if ((!name, !email, !password))
+  if ((!email, !password))
     return res
       .status(400)
       .json({ message: "Name,email and password is required" });
 
-  if (!newUser.name || !newUser.email || !newUser.password)
-    return res
-      .status(400)
-      .json({ message: "Name,email and password is required" });
-
+  
   //check duplicate data
-   const duplicate = await User.findOne({username:user}).exec();
+   const duplicate = await User.findOne({username:email}).exec();
    
     if ((duplicate)) 
   {return res.sendStatus(409); //conflice
@@ -32,10 +28,17 @@ const createNewUser = async (req, res) => {
     const hashPassword = await bcrypt.hash(password, 10);
     
     //create and store new user
+    const result = await User.create({
+      
+      "username": email,
+      "password": hashPassword
+      
+    });
 
+  console.log(result);
+     
     
-    
-    return res.status(201).json({ success: `User created ${newUser.name} created` });
+    return res.status(201).json({ success: `User created ${email} created` });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -1,15 +1,8 @@
-const data = {
-    users: require("../model/user.json"),
-    setUsers: function (data) {
-      this.users = data;
-    },
-  };
-  
-  const bcrypt = require("bcrypt");
+const User=require('../model/User')
+ 
+const bcrypt = require("bcrypt");
 const jwt=require('jsonwebtoken');
 //require('dotenv').config();
-const fsPromise=require('fs').promises;
-const path=require('path');
 
   const handleLogin= async (req,res)=>{
     console.log(req.body);
@@ -17,7 +10,7 @@ const {email,pwd}=req.body;
 console.log(`${email} - ${pwd}`);
 if (!email || !pwd) return res.status(400).json({"message":"user and pwd is required"})
   
-const userExist=data.users.find(u=>(u.email===email));
+const userExist=await User.findOne({username:email}).exec();
 if (!userExist) return res.sendStatus(401);// unauthorized
 
 
@@ -48,14 +41,14 @@ if (match){
  
     console.log(refreshToken);
     //saving refresh token with current user
-    const otherUsers=data.users.filter(u=>u.email!== userExist.email);
+    /*const otherUsers=data.users.filter(u=>u.email!== userExist.email);
     const currentUsers=   {...userExist,refreshToken};
     
     data.setUsers([...otherUsers,currentUsers]);
 await fsPromise.writeFile(
   path.join(__dirname,'..','model','user.json'),
   JSON.stringify(data.users)
-);
+);*/
 
    //  res.cookie('jwt',refreshToken,{httpOnly:true, maxAge:24*60*60*1000});
    res.cookie('jwt', refreshToken, {

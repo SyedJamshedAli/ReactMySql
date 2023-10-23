@@ -1,10 +1,5 @@
-const data = {
-  users: require("../model/user.json"),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
-
+const User=require('../model/User');
+ 
 const jwt = require("jsonwebtoken");
 
 //require("dotenv").config();
@@ -15,7 +10,7 @@ const handleRefreshToken = (req, res) => {
   if (!cookie?.jwt) return res.sendStatus(401);
   //console(cookie.jwt);
   const refreshToken = cookie.jwt;
-  const userExist = data.users.find(u => u.refreshToken === refreshToken   );
+  const userExist = await User.findOne({username:email}).exec(); //data.users.find(u => u.refreshToken === refreshToken   );
     console.log(`User Exist: ${userExist}`);
   if (!userExist) return res.sendStatus(403); // forbidden
 

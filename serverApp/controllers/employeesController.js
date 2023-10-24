@@ -1,72 +1,52 @@
-const User=require('../model/User')
+const Employee = require("../model/Employee");
 const bcrypt = require("bcrypt");
 
-const getAllusers = (req, res) => {
-  res.json(data.users);
+const getAllusers = async (req, res) => {
+  const employees = await Employee.find();
+  if (!employees) return res.status(204).json({ message: "No Employees" });
+  res.json(employees);
 };
 
 //const registerNewUser
 
 const createNewUser = async (req, res) => {
-
-    
-  const { name, email, password } = req.body;
-  if ((!name, !email, !password))
+  if (!req?.body?.firstname || !req?.body?.lastname) {
     return res
       .status(400)
-      .json({ message: "Name,email and password is required" });
+      .json({ message: "firstname and lastname is required" });
+  }
 
-  if (!newUser.name || !newUser.email || !newUser.password)
-    return res
-      .status(400)
-      .json({ message: "Name,email and password is required" });
+  try {
+    const result = await Employee.create({
+      "firstname": req.body.firstname,
+      "lastname": req.body.lastname,
+    });
+
+    res.status(201).json(result);
+  } catch (e) {
+    console.log(e);
+  }
 
   //check duplicate data
-   const duplicate = await User.findOne({username:user}).exec();
-   
-    if ((duplicate)) 
-  {return res.sendStatus(409); //conflice
-}
-  try {
-    //encrypt password
-    const hashPassword = await bcrypt.hash(password, 10);
-    
-    //create and store new user
-
-    
-    
-    return res.status(201).json({ success: `User created ${newUser.name} created` });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-
-  //data.setUsers(newUser);
+  // const duplicate = await User.findOne({username:user}).exec();
 };
 
-const updateUser = (req, res) => {
-  const user = data.users.find((user) => user.id === parseInt(req.body.id));
-  if (!user) {
+const updateUser = async (req, res) => {
+  if(!req?.body?.id){
+    return res.status(400).json({'message':'id param is required'})
+  }
+
+  const employee=await Employee.findOne({_id:req.body.id}).exec();
+  if (!employee) {
     return res
       .status(400)
-      .json({ message: `User ID ${req.body.id} not found` });
+      .json({ message: `employee ID ${req.body.id} not found` });
   }
-  if (req.body.name) user.name = req.body.name;
-  if (req.body.email) user.email = req.body.email;
-  if (req.body.password) user.password = req.body.password;
-  const filteredUserData = data.users.filter(
-    (user) => user.id !== parseInt(req.body.id)
-  );
-  const newUserArray = [...filteredUserData, user];
+  if (req.body?.firstname) employee.firstname = req.body.firstname;
+  if (req.body?.lastname) employee.lastname = req.body.lastname;
 
-  data.setUsers(
-    newUserArray.sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0))
-  );
-  res.json(data.users);
-
-  /* res.json({
-        "Put":req.body.firstname,
-        "Put_":req.body.lastname
-    })*/
+  const result=await employee.save();
+  res.json(result);
 };
 
 const deleteUser = (req, res) => {

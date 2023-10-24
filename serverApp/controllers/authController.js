@@ -1,6 +1,5 @@
 const User=require('../model/User')
- 
-const bcrypt = require("bcrypt");
+ const bcrypt = require("bcrypt");
 const jwt=require('jsonwebtoken');
 //require('dotenv').config();
 
@@ -15,7 +14,7 @@ if (!userExist) return res.sendStatus(401);// unauthorized
 
 
 //check password
-const match= await bcrypt.compare(pwd,userExist.password);
+ const match= await bcrypt.compare(pwd,userExist.password);
 
 if (match){
 
@@ -41,21 +40,18 @@ if (match){
  
     console.log(refreshToken);
     //saving refresh token with current user
-    /*const otherUsers=data.users.filter(u=>u.email!== userExist.email);
-    const currentUsers=   {...userExist,refreshToken};
-    
-    data.setUsers([...otherUsers,currentUsers]);
-await fsPromise.writeFile(
-  path.join(__dirname,'..','model','user.json'),
-  JSON.stringify(data.users)
-);*/
+
+userExist.refreshToken=refreshToken;
+const result=await userExist.save();
+console.log(result);
 
    //  res.cookie('jwt',refreshToken,{httpOnly:true, maxAge:24*60*60*1000});
    res.cookie('jwt', refreshToken, {
     httpOnly: true,
     maxAge: 24*60*60*1000,
-    sameSite:"None",
-    Secure:"True"
+    //Secure:"True",
+    sameSite:"None"
+    
   });
 
      

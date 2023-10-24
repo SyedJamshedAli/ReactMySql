@@ -13,7 +13,7 @@ router.route('/')
     employeeController.getAllusers    
 )
 .post(
-    verifyRoles(rolesList.Admin,rolesList.Editor),employeeController.createNewUser
+    employeeController.createNewUser
 )
 .put(
     verifyRoles(rolesList.Admin,rolesList.Editor),employeeController.updateUser

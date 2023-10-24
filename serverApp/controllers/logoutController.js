@@ -1,13 +1,5 @@
-const data = {
-  users: require("../model/user.json"),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
-
-const fsPromises=require('fs').promises;
-const path=require('path');
-
+const User=require('../model/User');
+ 
 
 const handleLogout = async (req, res) => {
 
@@ -17,7 +9,9 @@ const handleLogout = async (req, res) => {
 
   //check refresh token in db
   const refreshToken = cookie.jwt;
-  const userExist = data.users.find((u) => u.refreshToken === refreshToken);
+//  const userExist = data.users.find((u) => u.refreshToken === refreshToken);
+  const userExist = await User.findOne({refreshToken}).exec(); //data.users.find(u => u.refreshToken === refreshToken   );
+
   if (!userExist){
   
   res.clearCookie('jwt', {httpOnly:true})
@@ -25,13 +19,10 @@ const handleLogout = async (req, res) => {
     }
   
 //delete refresh token from db
-const otherUsers=data.users.filter(p=>p.refreshToken=userExist.refreshToken);
-const currentUser={...userExist,refreshToken:''};
-data.setUsers([...otherUsers,currentUser]);
-await fsPromises.writeFile(
-    path.join(__dirname,'..','model','user.json'),
-    JSON.stringify(data.users)
-);
+userExist.refreshToken="";
+const result=await userExist.save();
+console.log(result);
+
 res.clearCookie('jwt',{httpOnly:true,secure:true});
 res.sendStatus(204);
 };

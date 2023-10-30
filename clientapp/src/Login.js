@@ -1,17 +1,27 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Validation from './LoginValidations'
-
+import axios from 'axios';
 const Login = () => {
   const [values,setValues]=useState({
     email:'',
-    password:''
+    pwd:''
   })
 const [errors,setErrors]=useState({})
+const navigate=useNavigate();
   const handleSubmit=(e)=>{
     console.log(values);
 e.preventDefault();
 setErrors(Validation(values))
+axios.post('http://localhost:3500/auth',values)
+.then(res=>{
+  alert(res.data)
+  console.log(res.data.accessToken)
+  if(res.data.accessToken)
+ { navigate('/')}
+else
+{alert("Error");}
+})
   }
 
   const handleInput=(event)=>{
@@ -31,9 +41,9 @@ setErrors(Validation(values))
 
         </div>
         <div>
-          <label htmlFor="password">Password</label>
-          <input onChange={handleInput} type="password" placeholder='Enter Password' name='password' className='form-control rounded-0' />
-          <span>{errors.password && <span className='text-danger'>{errors.password}</span>}</span>
+          <label htmlFor="pwd">Password</label>
+          <input onChange={handleInput} type="password" placeholder='Enter Password' name='pwd' className='form-control rounded-0' />
+          <span>{errors.pwd && <span className='text-danger'>{errors.pwd}</span>}</span>
         </div>
         <button type="submit" className='btn btn-success w-100'><strong>Login</strong></button>
 <p>You agree with terms and conditions</p>

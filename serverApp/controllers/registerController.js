@@ -15,7 +15,7 @@ const createNewUser = async (req, res) => {
     return res
       .status(400)
       .json({ message: "Name,email and password is required" });
-
+console.log(req.body)
   
   //check duplicate data
    const duplicate = await User.findOne({username:email}).exec();
@@ -24,13 +24,15 @@ const createNewUser = async (req, res) => {
   {return res.sendStatus(409); //conflice
 }
   try {
+
     //encrypt password
-    const hashPassword = await bcrypt.hash(password, 10);
-    
+    console.log(password.toString());
+    const hashPassword = await bcrypt.hash(password.toString(), 10);
+    console.log(hashPassword);
     //create and store new user
     const result = await User.create({
       
-      "username": email,
+      "username": email.toString(),
       "password": hashPassword
       
     });

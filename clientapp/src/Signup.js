@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Validation from './SignupValidation'
 import axios from 'axios'
 const Signup = () => {
 const [values,SetValues]=useState({
-    name:'',
+    
     email:'',
     password:''
 })
@@ -15,15 +15,19 @@ const handleInput = (event)=>{
     SetValues(prev=>({...prev,[event.target.name]:[event.target.value]}))
 //console.log(values)
 }
-
+const navigate=useNavigate();
 const handleSubmit=(e)=>{
 e.preventDefault();
 setErrors(Validation(values))
-if(errors.name==="" && errors.email==="" && errors.password==="")
+alert('check');
+if(errors.email==="" && errors.password==="")
     {
       alert('call api')
-       axios.post('http://localhost:8081/signup',values)
-       .then(res=>console.log(res))
+       axios.post('http://localhost:3500/register',values)
+       .then(res=>{
+        navigate('/login')
+        console.log(res)
+      })
        .catch(err=>console.log(err))
     }
 }

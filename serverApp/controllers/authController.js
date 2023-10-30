@@ -9,12 +9,15 @@ const {email,pwd}=req.body;
 console.log(`${email} - ${pwd}`);
 if (!email || !pwd) return res.status(400).json({"message":"user and pwd is required"})
   
-const userExist=await User.findOne({username:email}).exec();
+const userExist=await User.findOne({username:email.toString()}).exec();
 if (!userExist) return res.sendStatus(401);// unauthorized
 
+console.log(pwd.toString());
+
+console.log(userExist.password);
 
 //check password
- const match= await bcrypt.compare(pwd,userExist.password);
+ const match= await bcrypt.compare(pwd.toString(),userExist.password);
 
 if (match){
 

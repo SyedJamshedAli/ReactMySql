@@ -1,9 +1,6 @@
 const User=require('../model/User')
 const bcrypt = require("bcrypt");
 
-const getAllusers = (req, res) => {
-  res.json(data.users);
-};
 
 //const registerNewUser
 
@@ -11,7 +8,7 @@ const createNewUser = async (req, res) => {
 
     
   const { name, email, password } = req.body;
-  if ((!email, !password))
+  if ((!name, !email, !password))
     return res
       .status(400)
       .json({ message: "Name,email and password is required" });
@@ -31,7 +28,7 @@ console.log(req.body)
     console.log(hashPassword);
     //create and store new user
     const result = await User.create({
-      
+      "name":name.toString(),
       "username": email.toString(),
       "password": hashPassword
       
@@ -46,6 +43,14 @@ console.log(req.body)
   }
 
   //data.setUsers(newUser);
+};
+
+const getAllusers = async (req, res) => {
+  console.log('in getAllUsers')
+  const usersData = await User.find();
+  if (!usersData) return res.status(204).json({ message: "No Employees" });
+  res.json(usersData);
+  
 };
 
 const updateUser = (req, res) => {
@@ -82,8 +87,9 @@ const deleteUser = (req, res) => {
 };
 
 const getUser = (req, res) => {
+  const userData=data.users;
   res.json({
-    urlParam: req.params.id,
+    userData
   });
 };
 

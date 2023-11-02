@@ -2,16 +2,23 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 //import { faFontAwesome } from "@fortawesome/react-fontawesome";
 import { faFontAwesome } from "@fortawesome/free-solid-svg-icons";
-//import axios from './api/axios';
+import axios from './api/axios';
 
+const NAME_REGEX=/^[A-z][A-z]{3,23}$/;
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = '/register';
 
 const Register = () => {
     const userRef = useRef();
+    const nameRef = useRef();
     const errRef = useRef();
 
+    const [name, setName] = useState('');
+    const [validUserName, setValidUserName] = useState(false);
+    const [nameFocus, setnameFocus] = useState(false);
+
+    
     const [user, setUser] = useState('');
     const [validName, setValidName] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
@@ -30,6 +37,10 @@ const Register = () => {
     useEffect(() => {
         userRef.current.focus();
     }, [])
+
+    useEffect(() => {
+        setValidUserName(NAME_REGEX.test(name));
+    }, [name])
 
     useEffect(() => {
         setValidName(USER_REGEX.test(user));
@@ -55,7 +66,7 @@ const Register = () => {
         }
         try {
             const response = await axios.post(REGISTER_URL,
-                JSON.stringify({ user, pwd }),
+                JSON.stringify({ name, email:user,password:pwd }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -96,6 +107,33 @@ const Register = () => {
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h1>Register</h1>
                     <form onSubmit={handleSubmit}>
+
+                    <label htmlFor="name">
+                            Name:
+                            <faFontAwesome icon={faCheck} className={validUserName ? "valid" : "hide"} />
+                            <faFontAwesome icon={faTimes} className={validUserName || !name ? "hide" : "invalid"} />
+                        </label>
+                        <input
+                            type="text"
+                            id="name"
+                            ref={nameRef}
+                            autoComplete="off"
+                            onChange={(e) => setName(e.target.value)}
+                            value={name}
+                            required
+                            aria-invalid={validName ? "false" : "true"}
+                            aria-describedby="uidnote"
+                            onFocus={() => setnameFocus(true)}
+                            onBlur={() => setnameFocus(false)}
+                        />
+                        <p id="uidnote" className={nameFocus && name && !validUserName ? "instructions" : "offscreen"}>
+                            <faFontAwesome icon={faInfoCircle} />
+                            4 to 24 characters.<br />
+                            
+                        </p>
+
+
+
                         <label htmlFor="username">
                             Username:
                             <faFontAwesome icon={faCheck} className={validName ? "valid" : "hide"} />

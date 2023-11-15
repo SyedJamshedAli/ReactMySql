@@ -1,9 +1,10 @@
 import { useRef, useEffect, useState,useContext } from 'react';
 import AuthContext from './context/AuthProvider';
 import axios from './api/axios';
+import {Link,useNavigate,useLocation} from 'react-router-dom';
 const LOGIN_URL = '/auth';
 const Login = () => {
-const {setAuth}=useContext(AuthContext);
+const {setAuth,persist,setPersist}=useContext(AuthContext);
     const userRef = useRef();
     const errRef = useRef();
 
@@ -37,7 +38,7 @@ const {setAuth}=useContext(AuthContext);
             //console.log(JSON.stringify(response));
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
-            setAuth({ user, pwd, roles, accessToken });
+           // setAuth({ user, pwd, roles, accessToken });
             setUser('');
             setPwd('');
             setSuccess(true);
@@ -55,6 +56,14 @@ const {setAuth}=useContext(AuthContext);
         }
     }
 
+const togglePersist=()=>{
+    setPersist(prev=> !prev);
+
+}
+
+useEffect(() => {
+    localStorage.setItem("persist",persist);
+}, [persist]);
 
     return (
         <>
@@ -93,6 +102,15 @@ const {setAuth}=useContext(AuthContext);
                             required
                         />
                         <button>Sign In</button>
+                        <div class="persistCheck">
+                            <input 
+                            type="checkbox"
+                            id="persist"
+                            onChange={togglePersist}
+
+                            />
+                            <label htmlFor='persist'>Trust This Device</label>
+                        </div>
 
 
         </form>

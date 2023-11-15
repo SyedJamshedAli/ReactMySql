@@ -1,7 +1,7 @@
 const allowedOrigins=require('../config/allowedOrigins');
 
 const credentials=(req,res,next)=>{
-const origin=req.headers.referer;//req.header.origin;
+const origin=req.headers.origin;//req.header.origin;
 console.log(`credentials.js origin:${origin}`)
 if(allowedOrigins.includes(origin))
 {
